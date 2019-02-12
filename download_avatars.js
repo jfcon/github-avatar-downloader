@@ -25,14 +25,15 @@ function downloadImageByURL(url, filePath) {
     .on("response", function(response) {
       console.log("Response Status Code: ", response.statusCode);
     })
-    .pipe(fs.createWriteStream("./avatarUrls.jpg"));
+    .pipe(fs.createWriteStream("./avatars/" + filePath));
 }
 
 getRepoContributors("jquery", "jquery", function(err, result) {
   var list = JSON.parse(result);
   for (i = 0; i < list.length; i++) {
     avatarUrl = list[i].avatar_url;
+    userName = list[i].login + ".jpg";
     // console.log(avatarUrl);
-    downloadImageByURL(avatarUrl);
+    downloadImageByURL(avatarUrl, userName);
   }
 });
