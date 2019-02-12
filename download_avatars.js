@@ -4,13 +4,14 @@ var fs = require("fs");
 var owner = process.argv[2];
 var repo = process.argv[3];
 console.log("Welcome to the GitHub Avatar Downloader!");
-// console.log(owner, repo);
 
 function getRepoContributors(owner, repo, cb) {
+  // GET call
   var options = {
     url: "https://api.github.com/repos/" + owner + "/" + repo + "/contributors",
     headers: {
       "User-Agent": "request",
+      // my auth token goes here
       Authorization: "token c564dc38e37f057b6849e326c9aff58ed560d392"
     }
   };
@@ -27,19 +28,23 @@ function downloadImageByURL(url, filePath) {
     .on("response", function(response) {
       console.log("Response Status Code: ", response.statusCode);
     })
+    // pipes specified image to a folder
     .pipe(fs.createWriteStream("./avatars/" + filePath));
 }
 
 getRepoContributors(owner, repo, function(err, result) {
+  // error throw if command line is left blank
   if (owner === undefined || repo === undefined) {
     console.log("Something went wrong!");
     throw err;
   } else {
+    // goes through data chunk and....
     var list = JSON.parse(result);
     for (i = 0; i < list.length; i++) {
+      //logs corresponding names and avatar URLs
       avatarUrl = list[i].avatar_url;
       userName = list[i].login + ".jpg";
-      // console.log(avatarUrl);
+      // sends both params to the download function
       downloadImageByURL(avatarUrl, userName);
     }
   }
