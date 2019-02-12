@@ -17,9 +17,22 @@ function getRepoContributors(repoOwner, repoName, cb) {
   });
 }
 
+function downloadImageByURL(url, filePath) {
+  request(url)
+    .on("error", function(err) {
+      throw err;
+    })
+    .on("response", function(response) {
+      console.log("Response Status Code: ", response.statusCode);
+    })
+    .pipe(fs.createWriteStream("./avatarUrls.jpg"));
+}
+
 getRepoContributors("jquery", "jquery", function(err, result) {
   var list = JSON.parse(result);
   for (i = 0; i < list.length; i++) {
-    console.log(list[i].avatar_url);
+    avatarUrl = list[i].avatar_url;
+    // console.log(avatarUrl);
+    downloadImageByURL(avatarUrl);
   }
 });
