@@ -30,16 +30,17 @@ function downloadImageByURL(url, filePath) {
     .pipe(fs.createWriteStream("./avatars/" + filePath));
 }
 
-if (process.argv[2] === undefined || process.argv[3] === undefined) {
-  return "Whoops! Something went wrong.";
-}
-
 getRepoContributors(owner, repo, function(err, result) {
-  var list = JSON.parse(result);
-  for (i = 0; i < list.length; i++) {
-    avatarUrl = list[i].avatar_url;
-    userName = list[i].login + ".jpg";
-    // console.log(avatarUrl);
-    downloadImageByURL(avatarUrl, userName);
+  if (owner === undefined || repo === undefined) {
+    console.log("Something went wrong!");
+    throw err;
+  } else {
+    var list = JSON.parse(result);
+    for (i = 0; i < list.length; i++) {
+      avatarUrl = list[i].avatar_url;
+      userName = list[i].login + ".jpg";
+      // console.log(avatarUrl);
+      downloadImageByURL(avatarUrl, userName);
+    }
   }
 });
