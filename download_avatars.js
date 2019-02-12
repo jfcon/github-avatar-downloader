@@ -35,7 +35,7 @@ function downloadImageByURL(url, filePath) {
 getRepoContributors(owner, repo, function(err, result) {
   // error throw if command line is left blank
   if (owner === undefined || repo === undefined) {
-    console.log("Something went wrong!");
+    console.log("Something went wrong! You're missing an Owner, a Repo, or both!");
     throw err;
   } else {
     // goes through data chunk and....
